@@ -1,0 +1,41 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Compress ECG Data{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+      <div class="row">
+        <div class="col">
+
+          <h1>Resulting Compressed ECG Data</h1>
+          <hr>
+
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Original File Size (Bytes)</th>
+                <th scope="col">Compression Ratio</th>
+                <th scope="col">Final File Size (Bytes)</th>
+                <th scope="col">Compressed File</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">{{ file_size }}</th>
+                <td>{{ compression_ratio }}</td>
+                <td>{{ final_file_size }}</td>
+                <td><a href="/return-files/" target="blank"><button class='btn btn-default'>Download!</button></a></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+{% endblock %}

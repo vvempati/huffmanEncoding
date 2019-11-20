@@ -1,0 +1,40 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Compress ECG Data{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+      <div class="row">
+        <div class="col">
+
+          <h1>Compress ECG Data</h1>
+          <hr>
+
+          <form action="/compress-data" method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+              <label>Select file</label>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" name="ecg_data" id="ecg_image">
+                <label class="custom-file-label" for="ecg_file">Select file...</label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Compress</button>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
