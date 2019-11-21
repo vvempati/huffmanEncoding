@@ -34,7 +34,8 @@ def compress_data():
             input_file_size = os.stat(data_filepath).st_size
 
             text_object = TextInterpreter(data_filepath)
-            text_object.read_binary_file()
+
+            text_object.create_output()
 
     return render_template("compress_output.html", file_size=input_file_size)
 
@@ -42,10 +43,10 @@ def compress_data():
 @app.route('/return-files/')
 def return_files():
     try:
-        output_filename = 'test.rtf' # change this later
+        output_filename = 'output.bin'
         output_data_filepath = os.getcwd() + OUTPUT_FOLDER + '/' + output_filename
 
-        return send_file(output_data_filepath, attachment_filename='test.rtf')
+        return send_file(output_data_filepath, attachment_filename=output_filename)
     except Exception as e:
         return str(e)
 
