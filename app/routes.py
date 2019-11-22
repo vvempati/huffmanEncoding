@@ -37,7 +37,7 @@ def compress_data():
 
             ratio = text_object.create_output()
 
-    return render_template("compress_output.html", file_size=input_file_size, compression_ratio = ratio)
+    return render_template("compress_output.html", file_size=input_file_size, compression_ratio=ratio, final_file_size=(text_object.initial_byte_counter * 3), result=text_object.codes_dict)
 
 
 @app.route('/return-files/')

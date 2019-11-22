@@ -107,20 +107,10 @@ class Huffman:
                 output.write(byte_value)
                 string_output += self.codes_dict[value]
         output.close()
-
         count = 0
         for key in self.values:
             count += len(self.codes_dict[key])*self.dictionary_of_values[key]
-            print(len(self.codes_dict[key]), "    ", self.dictionary_of_values[key],"     ", (len(self.codes_dict[key])*self.dictionary_of_values[key]))
-        print(count/8)
-        print("The initial file size was: ", self.initial_byte_counter*3)
-        print("The compressed file size is: ", count/8)
-        compression_ratio = (self.initial_byte_counter*3)/(count/8)
-        print("The compression ratio: ", compression_ratio)
+        compression_ratio = (count/8)/(self.initial_byte_counter*3)
         return compression_ratio
-
-
-sample = Huffman("/Users/vasavivempati/Downloads/sample_ecg_raw 3.bin")
-sample.create_output()
 
 

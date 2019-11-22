@@ -15,7 +15,6 @@
           <h1>Resulting Compressed ECG Data</h1>
           <hr>
 
-
           <table class="table">
             <thead>
               <tr>
@@ -33,6 +32,24 @@
                 <td><a href="/return-files/" target="blank"><button class='btn btn-default'>Download!</button></a></td>
               </tr>
             </tbody>
+          </table>
+
+          <h1>Decompression Data</h1>
+          <table>
+            <tr>
+                <th scope="col">Original Value</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col">Compression Code</th>
+              </tr>
+            {% for key, value in result.items() %}
+              <tr>
+                <th> {{ key }} </th>
+                <th></th>
+                <th></th>
+                <td> {{ value }} </td>
+              </tr>
+            {% endfor %}
           </table>
 
         </div>
