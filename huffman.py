@@ -16,10 +16,11 @@ class Node:
             return self.frequency < other.frequency
 
 
-class TextInterpreter:
+class Huffman:
     def __init__(self, file_path):
         self.file = file_path
         self.dict = {}
+        self.dictionary_of_values = {}
         self.dictlist = []
         self.newlist = []
         self.list_of_tuples = []
@@ -27,6 +28,8 @@ class TextInterpreter:
         self.codes_dict = {}
         self.codes = []
         self.values = []
+        self.initial_byte_counter = 0
+        self.original_size = os.path.getsize(file_path)
 
     def create_output(self):
         self.read_binary_file()
@@ -35,23 +38,22 @@ class TextInterpreter:
         self.create_heap_of_nodes_from_heap_of_tuples()
         self.merge_nodes_to_create_new_heap()
         self.create_codes(heapq.heappop(self.heap), [])
-        print(self.codes_dict)
-        self.create_output_file()
+        ratio = self.create_output_file()
+        return ratio
 
     def read_binary_file(self):
-        x = 5
-        dictionary_of_values = {}
         with open(self.file, "rb") as f:
             byte = f.read(3)
             while byte:
                 byte = f.read(3)
-                decimal = int.from_bytes(byte, byteorder='little', signed=True)
+                self.initial_byte_counter += 1
+                decimal = int.from_bytes(byte, byteorder='big', signed=True)
                 self.values.append(decimal)
-                if decimal not in dictionary_of_values.keys():
-                    dictionary_of_values[decimal] = 1
+                if decimal not in self.dictionary_of_values.keys():
+                    self.dictionary_of_values[decimal] = 1
                 else:
-                    dictionary_of_values[decimal] += 1
-        self.dict = dictionary_of_values
+                    self.dictionary_of_values[decimal] += 1
+        self.dict = self.dictionary_of_values
 
     def create_list_of_lists_from_dictionary(self):
         for key1, value1 in self.dict.items():
@@ -83,7 +85,6 @@ class TextInterpreter:
         if node:
             if node.left is None and node.right is None:
                 temp_code = (','.join(self.codes)).replace(',','')
-                print(temp_code)
                 self.codes_dict[node.value] = temp_code # need to keep running string for left and right traversal
                 temp_code = None
             self.codes.append("0")
@@ -93,36 +94,33 @@ class TextInterpreter:
             self.create_codes(node.right,self.codes)
             self.codes.pop()
 
+    def bitstring_to_bytes(s):
+        return int(s, 2).to_bytes(len(s) // 8, byteorder='big')
+
     def create_output_file(self):
         string_output = ""
-        print(os.getcwd())
         with open("app/outputs/output.bin", 'wb') as output:
             for value in self.values:
                 # pad string to multiple of 8
                 padded = len(self.codes_dict[value]) % 8 * "0" + self.codes_dict[value]
                 byte_value = str.encode(padded)
                 output.write(byte_value)
-                # create bytes 1 byte = 8 bits
-                # write byte to output binary file
                 string_output += self.codes_dict[value]
         output.close()
 
+        count = 0
+        for key in self.values:
+            count += len(self.codes_dict[key])*self.dictionary_of_values[key]
+            print(len(self.codes_dict[key]), "    ", self.dictionary_of_values[key],"     ", (len(self.codes_dict[key])*self.dictionary_of_values[key]))
+        print(count/8)
+        print("The initial file size was: ", self.initial_byte_counter*3)
+        print("The compressed file size is: ", count/8)
+        compression_ratio = (self.initial_byte_counter*3)/(count/8)
+        print("The compression ratio: ", compression_ratio)
+        return compression_ratio
 
 
-
-#print(sample.list_of_tuples)
-#sample.create_heap_of_nodes_from_heap_of_tuples()
-#sample.merge_nodes_to_create_new_heap()
-#print (sample.heap)
-# while sample.heap:
-#     current = heapq.heappop(sample.heap)
-#     print(
-#         current.value,
-#         current.frequency,
-#         current.left.value,
-#         current.left.frequency,
-#         current.right.value,
-#         current.right.frequency
-#     )
+sample = Huffman("/Users/vasavivempati/Downloads/sample_ecg_raw 3.bin")
+sample.create_output()
 
 

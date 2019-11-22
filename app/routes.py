@@ -2,7 +2,7 @@ from app import app
 from flask import render_template, request, send_file
 from werkzeug.utils import secure_filename
 import os
-from text_interpreter import TextInterpreter
+from huffman import Huffman
 
 UPLOAD_FOLDER = '/app/uploads'
 OUTPUT_FOLDER = '/app/outputs'
@@ -33,11 +33,11 @@ def compress_data():
 
             input_file_size = os.stat(data_filepath).st_size
 
-            text_object = TextInterpreter(data_filepath)
+            text_object = Huffman(data_filepath)
 
-            text_object.create_output()
+            ratio = text_object.create_output()
 
-    return render_template("compress_output.html", file_size=input_file_size)
+    return render_template("compress_output.html", file_size=input_file_size, compression_ratio = ratio)
 
 
 @app.route('/return-files/')
